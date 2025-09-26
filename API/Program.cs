@@ -1,9 +1,17 @@
+using YamSoft.API.Interfaces;
+using YamSoft.API.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IDatabaseService, DatabaseService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
