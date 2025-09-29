@@ -59,7 +59,14 @@ public class YamSoftDbContext(DbContextOptions<YamSoftDbContext> options) : DbCo
                   .HasForeignKey(n => n.UserId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            entity.Property(e => e.Type).HasMaxLength(50);
+            entity.Property(e => e.Type)
+                  .HasConversion<string>()
+                  .HasMaxLength(50);
+                  
+            entity.Property(e => e.Status)
+                  .HasConversion<string>()
+                  .HasMaxLength(20);
+                  
             entity.Property(e => e.Message).HasMaxLength(1000);
         });
     }

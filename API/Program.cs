@@ -11,19 +11,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add CORS for frontend
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowReactApp", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
-});
-
-// Entity Framework configuration
 builder.Services.AddDbContext<YamSoftDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
