@@ -7,18 +7,21 @@ namespace YamSoft.API.Services;
 
 public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAuthService
 {
-    public AuthResponse Register(UserRegisterDto userDto)
+    public async Task<AuthResponse> RegisterAsync(UserRegisterDto userDto)
     {
         var username = userDto.Username;
 
-        if (!databaseService.UserExists(username)) // Changed to !UserExists for demo purposes *change back when connected to real DB*
+        if (await databaseService.UserExistsAsync(username))
         {
             throw new Exception("User already exists");
         }
 
         var hashedPassword = HashPassword(userDto.Password);
 
-        var createdUser = databaseService.CreateUser(username, hashedPassword);
+        var createdUser = await databaseService.CreateUserAsync(username, hashedPassword);
+
+        // Create a welcome notification
+        await databaseService.CreateNotificationAsync(createdUser.Id, "Welcome", "Welcome to YamSoft Shop!");
 
         return new AuthResponse
         {
@@ -28,21 +31,23 @@ public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAu
         };
     }
 
-    public AuthResponse Login(UserLoginDto userDto)
+    public async Task<AuthResponse> LoginAsync(UserLoginDto userDto)
     {
         var username = userDto.Username;
 
-        if (!databaseService.UserExists(username))
+        if (!await databaseService.UserExistsAsync(username))
         {
             throw new Exception("User does not exist");
         }
 
-        var user = databaseService.GetUserByUsername(username);
-        var hashedPassword = HashPassword(userDto.Password); // Due to the absence of a real database, we hash the provided password for comparison
-        if (!VerifyPassword(userDto.Password, hashedPassword))
+        var user = await databaseService.GetUserByUsernameAsync(username);
+        if (user == null || !VerifyPassword(userDto.Password, user.HashedPassword))
         {
-            throw new Exception("Invalid password");
+            throw new Exception("Invalid credentials");
         }
+
+        // Create a login notification
+        await databaseService.CreateNotificationAsync(user.Id, "Login", "You have successfully logged in!");
 
         return new AuthResponse
         {

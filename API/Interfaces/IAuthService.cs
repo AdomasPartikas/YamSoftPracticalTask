@@ -5,6 +5,6 @@ namespace YamSoft.API.Interfaces;
 
 public interface IAuthService
 {
-    public AuthResponse Register(UserRegisterDto userDto);
-    public AuthResponse Login(UserLoginDto userDto);
+    Task<AuthResponse> RegisterAsync(UserRegisterDto userDto);
+    Task<AuthResponse> LoginAsync(UserLoginDto userDto);
 }
