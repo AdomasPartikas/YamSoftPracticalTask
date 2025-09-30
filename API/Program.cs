@@ -27,7 +27,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<YamSoftDbContext>();
-    await DatabaseSeeder.SeedAsync(context);
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    await DatabaseSeeder.SeedAsync(context, configuration);
 }
 
 if (app.Environment.IsDevelopment())
