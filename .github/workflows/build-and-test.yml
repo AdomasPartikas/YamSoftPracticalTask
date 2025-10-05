@@ -1,0 +1,36 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  api-build-and-test:
+    name: API Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore API dependencies
+      run: dotnet restore API/YamSoft.API.csproj
+    
+    - name: Build API
+      run: dotnet build API/YamSoft.API.csproj --no-restore --configuration Release
+    
+    - name: Restore test dependencies
+      run: dotnet restore tests/YamSoft.API.Tests/YamSoft.API.Tests.csproj
+    
+    - name: Build Tests
+      run: dotnet build tests/YamSoft.API.Tests/YamSoft.API.Tests.csproj --no-restore --configuration Release
+    
+    - name: Run Unit Tests
+      run: dotnet test tests/YamSoft.API.Tests/YamSoft.API.Tests.csproj --no-build --configuration Release --verbosity normal --logger trx --results-directory TestResults/
