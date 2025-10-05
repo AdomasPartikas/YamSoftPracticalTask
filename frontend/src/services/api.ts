@@ -6,6 +6,7 @@ import {
   Product, 
   Cart
 } from '../types';
+import { CookieManager } from '../utils/cookies';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL ?? (() => { throw new Error('REACT_APP_API_URL is not defined in environment variables'); })();
 
@@ -16,9 +17,33 @@ const apiClient = axios.create({
   },
 });
 
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = CookieManager.get('auth_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (error.response?.status === 401) {
+      CookieManager.remove('auth_token');
+      localStorage.removeItem('user');
+      
+      if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/')) {
+        window.location.href = '/';
+      }
+      
+      return Promise.reject(new Error('Unauthorized. Please log in again.'));
+    }
+
     if (error.response?.data?.error) {
       throw new Error(error.response.data.error);
     }

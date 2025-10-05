@@ -1,18 +1,21 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YamSoft.API.Dtos;
-using YamSoft.API.Entities;
 using YamSoft.API.Interfaces;
 
 namespace YamSoft.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class NotificationController(IDatabaseService databaseService, IMapper mapper) : ControllerBase
 {
     [HttpGet]
     [Route("user/{userId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<NotificationDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetNotificationsByUserId(int userId)
     {
         try
@@ -29,7 +32,9 @@ public class NotificationController(IDatabaseService databaseService, IMapper ma
 
     [HttpGet]
     [Route("user/{userId}/unread")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<NotificationDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetUnreadNotificationsByUserId(int userId)
     {
         try
@@ -46,7 +51,9 @@ public class NotificationController(IDatabaseService databaseService, IMapper ma
 
     [HttpGet]
     [Route("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(NotificationDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetNotification(int id)
     {
@@ -66,8 +73,9 @@ public class NotificationController(IDatabaseService databaseService, IMapper ma
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(NotificationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CreateNotification([FromBody] CreateNotificationDto createNotificationDto)
     {
         try
@@ -95,9 +103,10 @@ public class NotificationController(IDatabaseService databaseService, IMapper ma
 
     [HttpPut]
     [Route("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(NotificationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateNotification(int id, [FromBody] UpdateNotificationDto updateNotificationDto)
     {
         try
@@ -128,7 +137,9 @@ public class NotificationController(IDatabaseService databaseService, IMapper ma
 
     [HttpPut]
     [Route("{id}/mark-read")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(NotificationDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> MarkAsRead(int id)
     {
@@ -153,6 +164,8 @@ public class NotificationController(IDatabaseService databaseService, IMapper ma
     [HttpDelete]
     [Route("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteNotification(int id)
     {
