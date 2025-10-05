@@ -7,7 +7,12 @@ public class CartDto
     public DateTime UpdatedAt { get; set; }
     public decimal TotalAmount { get; set; }
     public ICollection<CartItemDto> CartItems { get; set; } = [];
+}
 
+public class CartResponseDto : CartDto
+{
+    public int Id { get; set; }
+    public new ICollection<CartItemResponseDto> CartItems { get; set; } = [];
 }
 
 public class AddToCartDto : CartDto

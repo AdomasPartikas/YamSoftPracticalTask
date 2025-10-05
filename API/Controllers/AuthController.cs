@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using YamSoft.API.Dtos;
 using YamSoft.API.Interfaces;
+using YamSoft.API.Models;
 
 namespace YamSoft.API.Controllers;
 
@@ -10,7 +11,7 @@ public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost]
     [Route("register")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] UserRegisterDto userDto)
     {
@@ -35,7 +36,7 @@ public class AuthController(IAuthService authService) : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login([FromBody] UserLoginDto userDto)
     {

@@ -21,7 +21,7 @@ public class CartController(IDatabaseService databaseService, IMapper mapper) : 
             var cart = await databaseService.GetCartByUserIdAsync(userId);
             cart ??= await databaseService.CreateCartAsync(userId);
 
-            var cartDto = mapper.Map<CartDto>(cart);
+            var cartDto = mapper.Map<CartResponseDto>(cart);
             return Ok(cartDto);
         }
         catch (Exception ex)
@@ -42,7 +42,7 @@ public class CartController(IDatabaseService databaseService, IMapper mapper) : 
             if (cart == null)
                 return NotFound(new { error = "Cart not found" });
 
-            var cartDto = mapper.Map<CartDto>(cart);
+            var cartDto = mapper.Map<CartResponseDto>(cart);
             return Ok(cartDto);
         }
         catch (Exception ex)
@@ -64,7 +64,7 @@ public class CartController(IDatabaseService databaseService, IMapper mapper) : 
                 return BadRequest(new { error = "User already has a cart" });
 
             var cart = await databaseService.CreateCartAsync(userId);
-            var cartDto = mapper.Map<CartDto>(cart);
+            var cartDto = mapper.Map<CartResponseDto>(cart);
 
             return CreatedAtAction(nameof(GetCart), new { id = cart.Id }, cartDto);
         }
@@ -98,7 +98,7 @@ public class CartController(IDatabaseService databaseService, IMapper mapper) : 
                 return BadRequest(new { error = "Insufficient stock" });
 
             var cartItem = await databaseService.AddCartItemAsync(cartId, addToCartDto.ProductId, addToCartDto.Quantity);
-            var cartItemDto = mapper.Map<CartItemDto>(cartItem);
+            var cartItemDto = mapper.Map<CartItemResponseDto>(cartItem);
 
             return Ok(cartItemDto);
         }
@@ -132,7 +132,7 @@ public class CartController(IDatabaseService databaseService, IMapper mapper) : 
             cartItem.Quantity = updateCartItemDto.Quantity;
             await databaseService.UpdateCartItemAsync(cartItem);
 
-            var cartItemDto = mapper.Map<CartItemDto>(cartItem);
+            var cartItemDto = mapper.Map<CartItemResponseDto>(cartItem);
             return Ok(cartItemDto);
         }
         catch (Exception ex)

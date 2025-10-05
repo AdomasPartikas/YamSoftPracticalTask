@@ -9,19 +9,23 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<User, UserDto>();
+        CreateMap<User, UserResponseDto>();
         CreateMap<UserDto, User>()
             .ForMember(dest => dest.HashedPassword, opt => opt.Ignore())
             .ForMember(dest => dest.Cart, opt => opt.Ignore())
             .ForMember(dest => dest.Notifications, opt => opt.Ignore());
 
         CreateMap<Product, ProductDto>();
+        CreateMap<Product, ProductResponseDto>();
         CreateMap<CreateProductDto, Product>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         CreateMap<UpdateProductDto, Product>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<Cart, CartDto>();
+        CreateMap<Cart, CartResponseDto>();
         CreateMap<CartItem, CartItemDto>();
+        CreateMap<CartItem, CartItemResponseDto>();
         CreateMap<AddToCartDto, CartItem>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CartId, opt => opt.Ignore())

@@ -17,7 +17,7 @@ public class ProductController(IDatabaseService databaseService, IMapper mapper)
         try
         {
             var products = await databaseService.GetAllProductsAsync();
-            var productDtos = mapper.Map<IEnumerable<ProductDto>>(products);
+            var productDtos = mapper.Map<IEnumerable<ProductResponseDto>>(products);
             return Ok(productDtos);
         }
         catch (Exception ex)
@@ -38,7 +38,7 @@ public class ProductController(IDatabaseService databaseService, IMapper mapper)
             if (product == null)
                 return NotFound(new { error = "Product not found" });
 
-            var productDto = mapper.Map<ProductDto>(product);
+            var productDto = mapper.Map<ProductResponseDto>(product);
             return Ok(productDto);
         }
         catch (Exception ex)
@@ -55,7 +55,7 @@ public class ProductController(IDatabaseService databaseService, IMapper mapper)
         try
         {
             var products = await databaseService.GetProductsByNameAsync(name);
-            var productDtos = mapper.Map<IEnumerable<ProductDto>>(products);
+            var productDtos = mapper.Map<IEnumerable<ProductResponseDto>>(products);
             return Ok(productDtos);
         }
         catch (Exception ex)
@@ -76,7 +76,7 @@ public class ProductController(IDatabaseService databaseService, IMapper mapper)
 
             var product = mapper.Map<Product>(createProductDto);
             var createdProduct = await databaseService.CreateProductAsync(product);
-            var productDto = mapper.Map<ProductDto>(createdProduct);
+            var productDto = mapper.Map<ProductResponseDto>(createdProduct);
 
             return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, productDto);
         }
@@ -105,7 +105,7 @@ public class ProductController(IDatabaseService databaseService, IMapper mapper)
             mapper.Map(updateProductDto, existingProduct);
 
             await databaseService.UpdateProductAsync(existingProduct);
-            var productDto = mapper.Map<ProductDto>(existingProduct);
+            var productDto = mapper.Map<ProductResponseDto>(existingProduct);
 
             return Ok(productDto);
         }
