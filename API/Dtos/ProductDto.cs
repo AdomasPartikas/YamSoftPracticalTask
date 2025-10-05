@@ -9,6 +9,11 @@ public class ProductDto
     public string? ImageUrl { get; set; }
 }
 
+public class ProductResponseDto : ProductDto
+{
+    public int Id { get; set; }
+}
+
 public class CreateProductDto : ProductDto
 {
     // Inherits all properties from ProductDto

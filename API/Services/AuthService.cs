@@ -26,7 +26,7 @@ public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAu
         {
             Token = "dummy_token",
             ExpiresAt = DateTime.UtcNow.AddHours(1),
-            User = mapper.Map<UserDto>(createdUser)
+            User = mapper.Map<UserResponseDto>(createdUser)
         };
     }
 
@@ -51,7 +51,7 @@ public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAu
         {
             Token = "dummy_token",
             ExpiresAt = DateTime.UtcNow.AddHours(1),
-            User = mapper.Map<UserDto>(user)
+            User = mapper.Map<UserResponseDto>(user)
         };
     }
 
