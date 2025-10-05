@@ -33,7 +33,8 @@ public class AuthController(IAuthService authService) : ControllerBase
         }
     }
 
-    [HttpPost("login")]
+    [HttpPost]
+    [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login([FromBody] UserLoginDto userDto)

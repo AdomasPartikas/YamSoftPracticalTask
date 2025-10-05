@@ -20,8 +20,7 @@ public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAu
 
         var createdUser = await databaseService.CreateUserAsync(username, hashedPassword);
 
-        // Create a welcome notification
-        await databaseService.CreateNotificationAsync(createdUser.Id, "Welcome", "Welcome to YamSoft Shop!");
+        await databaseService.CreateNotificationAsync(createdUser.Id, Enums.NotificationType.Welcome, "Welcome to YamSoft Shop!");
 
         return new AuthResponse
         {
@@ -46,8 +45,7 @@ public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAu
             throw new Exception("Invalid credentials");
         }
 
-        // Create a login notification
-        await databaseService.CreateNotificationAsync(user.Id, "Login", "You have successfully logged in!");
+        await databaseService.CreateNotificationAsync(user.Id, Enums.NotificationType.Login, "You have successfully logged in!");
 
         return new AuthResponse
         {
