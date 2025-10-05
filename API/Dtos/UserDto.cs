@@ -3,6 +3,7 @@ namespace YamSoft.API.Dtos;
 public class UserDto // Base class for user data transfer objects
 {
     public required string Username { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 public class UserAuthDto : UserDto

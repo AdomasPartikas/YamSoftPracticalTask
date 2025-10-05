@@ -12,35 +12,50 @@ public class AuthController(IAuthService authService) : ControllerBase
     [Route("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Register([FromBody] UserRegisterDto userDto)
+    public async Task<IActionResult> Register([FromBody] UserRegisterDto userDto)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        var (isValid, errorMessage) = Validator.IsUserDataValid(userDto);
-        if (!isValid)
-            return BadRequest(errorMessage);
+            var (isValid, errorMessage) = Validator.IsUserDataValid(userDto);
+            if (!isValid)
+                return BadRequest(new { error = errorMessage });
 
-        var authResponse = authService.Register(userDto);
+            var authResponse = await authService.RegisterAsync(userDto);
 
-        return Ok(authResponse);
+            return Ok(authResponse);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
-    [HttpPost("login")]
+    [HttpPost]
+    [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Login([FromBody] UserLoginDto userDto)
+    public async Task<IActionResult> Login([FromBody] UserLoginDto userDto)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+        try
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        var (isValid, errorMessage) = Validator.IsUserDataValid(userDto);
-        if (!isValid)
-            return BadRequest(errorMessage);
+            var (isValid, errorMessage) = Validator.IsUserDataValid(userDto);
+            if (!isValid)
+                return BadRequest(new { error = errorMessage });
 
-        var authResponse = authService.Login(userDto);
+            var authResponse = await authService.LoginAsync(userDto);
 
-        return Ok(authResponse);
+            return Ok(authResponse);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 }
 
