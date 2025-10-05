@@ -4,9 +4,7 @@ import {
   UserRegisterDto, 
   AuthResponse, 
   Product, 
-  Cart, 
-  AddToCartDto,
-  ApiError 
+  Cart
 } from '../types';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL ?? (() => { throw new Error('REACT_APP_API_URL is not defined in environment variables'); })();
@@ -18,7 +16,6 @@ const apiClient = axios.create({
   },
 });
 
-// Response interceptor to handle errors
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {

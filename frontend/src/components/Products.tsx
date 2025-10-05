@@ -52,15 +52,12 @@ const Products: React.FC = () => {
     loadProducts();
   }, [loadProducts]);
 
-  // Simple infinite scroll - for now just showing all products
-  // In a real implementation, you'd implement pagination
   const handleScroll = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop
       >= document.documentElement.offsetHeight - 1000
     ) {
       // Load more products here
-      // For now, we're just showing all products at once
     }
   }, []);
 

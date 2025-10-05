@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Cart, CartItem, Product } from '../types';
+import { Cart, Product } from '../types';
 import { CartService } from '../services/api';
 import { useAuth } from './AuthContext';
 
@@ -31,7 +31,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
-  // Load cart when user is authenticated
   useEffect(() => {
     if (isAuthenticated && user) {
       refreshCart();
@@ -59,7 +58,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
     setLoading(true);
     try {
-      // Ensure we have a cart first
       let currentCart = cart;
       if (!currentCart) {
         currentCart = await CartService.getCartByUserId(user.id);
@@ -67,7 +65,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       }
       
       await CartService.addToCart(currentCart.id, product.id, quantity);
-      // Refresh the cart to get updated data
+
       await refreshCart();
     } catch (error) {
       console.error('Failed to add to cart:', error);
@@ -82,11 +80,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
     setLoading(true);
     try {
-      // Find the cart item ID for this product
       const cartItem = cart.cartItems.find(item => item.productId === productId);
       if (cartItem) {
         await CartService.removeFromCart(cartItem.id);
-        // Refresh the cart to get updated data
         await refreshCart();
       }
     } catch (error) {
@@ -102,11 +98,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
     setLoading(true);
     try {
-      // Find the cart item ID for this product
       const cartItem = cart.cartItems.find(item => item.productId === productId);
       if (cartItem) {
         await CartService.updateCartItem(cartItem.id, quantity);
-        // Refresh the cart to get updated data
+
         await refreshCart();
       }
     } catch (error) {
