@@ -5,7 +5,7 @@ using YamSoft.API.Models;
 
 namespace YamSoft.API.Services;
 
-public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAuthService
+public class AuthService(IDatabaseService databaseService, IJwtService jwtService, IMapper mapper) : IAuthService
 {
     public async Task<AuthResponse> RegisterAsync(UserRegisterDto userDto)
     {
@@ -22,10 +22,12 @@ public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAu
 
         await databaseService.CreateNotificationAsync(createdUser.Id, Enums.NotificationType.Welcome, "Welcome to YamSoft Shop!");
 
+        var (token, expiresAt) = await jwtService.GenerateToken(createdUser);
+
         return new AuthResponse
         {
-            Token = "dummy_token",
-            ExpiresAt = DateTime.UtcNow.AddHours(1),
+            Token = token,
+            ExpiresAt = expiresAt,
             User = mapper.Map<UserResponseDto>(createdUser)
         };
     }
@@ -47,10 +49,12 @@ public class AuthService(IDatabaseService databaseService, IMapper mapper) : IAu
 
         await databaseService.CreateNotificationAsync(user.Id, Enums.NotificationType.Login, "You have successfully logged in!");
 
+        var (token, expiresAt) = await jwtService.GenerateToken(user);
+
         return new AuthResponse
         {
-            Token = "dummy_token",
-            ExpiresAt = DateTime.UtcNow.AddHours(1),
+            Token = token,
+            ExpiresAt = expiresAt,
             User = mapper.Map<UserResponseDto>(user)
         };
     }
