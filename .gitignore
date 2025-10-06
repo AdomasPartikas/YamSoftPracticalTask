@@ -488,7 +488,7 @@ appsettings.Development.json
 .vscode/*
 
 mysql/data/
-#images/*.jpg
+images/*.jpg
 images/*.png
 images/*.gif
 images/*.webp
