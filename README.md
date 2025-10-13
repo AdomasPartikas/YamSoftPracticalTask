@@ -102,6 +102,19 @@ The API will be available at:
 
 Note: The API is using HTTPSRedirection, so most likely you will always be redirected to the HTTPS url.
 
+### 5. Create a User
+
+Currently there are no users in the database and there is no registration page in the frontend.
+
+#### Add the User Through Swagger Dashboard
+
+In the dashboard you will find the Auth controller with the 'api/Auth/register' POST endpoint.
+Enter values in the payload `{"username": "", "password": ""}` and execute. 
+
+#### Send an HTTP Request
+
+Using your favorite API platform (Postman, HTTPie, etc.) create a POST request to https://localhost:7272/api/Auth/register endpoint with the `{"username": "", "password": ""}` payload. 
+
 ## Frontend (Optional)
 
 ### Install Dependencies
